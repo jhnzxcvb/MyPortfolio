@@ -139,6 +139,11 @@
 <section id="certs">
   <p class="section-label">04 / Certifications</p>
   <h2 class="section-title reveal">Credentials</h2>
+  <div class="cert-meta reveal">
+    <span class="cert-count">Total certificates: <strong id="certCount">10</strong></span>
+    <a id="credlyLink" href="https://www.credly.com/users/michael-john-suniega" target="_blank" rel="noreferrer" class="btn-ghost">View on Credly</a>
+  </div>
+  <div class="cert-feedback" id="certFeedback">Click the Certifications section to see this update.</div>
   <div class="cert-grid reveal">
     <div class="cert-card"><div class="cert-badge"></div><div class="cert-issuer">Cisco</div><div class="cert-name">Junior Cybersecurity Analyst Career Path</div><div class="cert-date">Dec 2025</div></div>
     <div class="cert-card"><div class="cert-badge"></div><div class="cert-issuer">Cisco</div><div class="cert-name">Introduction to Cybersecurity</div><div class="cert-date">Oct 2025</div></div>
@@ -247,6 +252,30 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); observer.unobserve(e.target); } });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
+
+  const certSection = document.getElementById('certs');
+  const certGrid = certSection.querySelector('.cert-grid');
+  const certCountEl = document.getElementById('certCount');
+  const certFeedback = document.getElementById('certFeedback');
+
+  function updateCertCount() {
+    const count = certGrid.querySelectorAll('.cert-card').length;
+    certCountEl.textContent = count;
+    return count;
+  }
+
+  function showCertFeedback(count) {
+    certFeedback.textContent = `Certification section clicked — ${count} certificates loaded.`;
+    certFeedback.classList.add('feedback-visible');
+  }
+
+  certSection.addEventListener('click', event => {
+    if (event.target.closest('a')) return;
+    showCertFeedback(updateCertCount());
+  });
+
+  const certObserver = new MutationObserver(() => updateCertCount());
+  certObserver.observe(certGrid, { childList: true, subtree: true });
 </script>
 </body>
 </html>

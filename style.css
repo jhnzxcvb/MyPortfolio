@@ -537,6 +537,35 @@ section { padding: 7rem 4rem; border-bottom: 0.5px solid var(--border); }
   margin-top: 1.5rem;
   line-height: 1.7;
 }
+.cert-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.cert-count {
+  font-family: 'DM Mono', monospace;
+  color: var(--accent-warm);
+  letter-spacing: 0.08em;
+}
+.cert-feedback {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--muted);
+  padding: 1rem 1.2rem;
+  border: 0.5px solid var(--border);
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  opacity: 0.8;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.cert-feedback.feedback-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 .contact-details { display: flex; flex-direction: column; gap: 0; }
 .contact-row {
   display: flex;
