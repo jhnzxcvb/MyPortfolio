@@ -19,6 +19,7 @@
     <li><a href="#about" onclick="closeMenu()">About</a></li>
     <li><a href="#skills" onclick="closeMenu()">Skills</a></li>
     <li><a href="#experience" onclick="closeMenu()">Work</a></li>
+    <li><a href="#portfolio" onclick="closeMenu()">Portfolio</a></li>
     <li><a href="#certs" onclick="closeMenu()">Certs</a></li>
     <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
   </ul>
@@ -136,8 +137,80 @@
   </div>
 </section>
 
+<section id="portfolio">
+  <p class="section-label">04 / Portfolio</p>
+  <h2 class="section-title reveal">Graphic Design Work</h2>
+  <div class="portfolio-filter reveal">
+    <button class="filter-btn" data-category="Jerseys" type="button">Jerseys</button>
+    <button class="filter-btn" data-category="T-Shirts & Polo Shirts" type="button">T-Shirts & Polo Shirts</button>
+    <button class="filter-btn" data-category="Posters" type="button">Posters</button>
+    <button class="filter-btn" data-category="Others" type="button">Others</button>
+  </div>
+  <div class="portfolio-grid reveal">
+    <article class="portfolio-card" role="button" tabindex="0" data-category="Jerseys">
+      <div class="portfolio-preview portfolio-jersey">
+        <img src="images/Jerseys/TRH%20Preview.jpg" alt="TRH Preview jersey sample">
+      </div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">Jerseys</span>
+        <h3>Team Jersey Concept</h3>
+        <p>Custom sports jersey design for a club campaign, with sharp lines, player name styling, and branded accents.</p>
+      </div>
+    </article>
+    <article class="portfolio-card" role="button" tabindex="0" data-category="T-Shirts & Polo Shirts">
+      <div class="portfolio-preview portfolio-apparel">Apparel Mockup</div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">T-Shirts &amp; Polo Shirts</span>
+        <h3>Branded Polo Collection</h3>
+        <p>A polished polo shirt layout created for corporate events, featuring bold logos and clean color blocking.</p>
+      </div>
+    </article>
+    <article class="portfolio-card" role="button" tabindex="0" data-category="Posters">
+      <div class="portfolio-preview portfolio-poster">Poster Mockup</div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">Posters</span>
+        <h3>Event Poster Design</h3>
+        <p>Eye-catching poster concept for a music showcase, balancing typography, imagery, and color contrast.</p>
+      </div>
+    </article>
+    <article class="portfolio-card" role="button" tabindex="0" data-category="T-Shirts & Polo Shirts">
+      <div class="portfolio-preview portfolio-apparel">Apparel Mockup</div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">T-Shirts &amp; Polo Shirts</span>
+        <h3>Merchandise Shirt Mockup</h3>
+        <p>Creative t-shirt mockup with layered graphics for a lifestyle brand, optimized for print-ready workflows.</p>
+      </div>
+    </article>
+    <article class="portfolio-card" role="button" tabindex="0" data-category="Posters">
+      <div class="portfolio-preview portfolio-poster">Poster Mockup</div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">Posters</span>
+        <h3>Campaign Poster Series</h3>
+        <p>A series of promotional posters designed for a community campaign with strong visual hierarchy.</p>
+      </div>
+    </article>
+    <article class="portfolio-card" role="button" tabindex="0" data-category="Others">
+      <div class="portfolio-preview portfolio-other">Design Mockup</div>
+      <div class="portfolio-details">
+        <span class="portfolio-tag">Others</span>
+        <h3>Brand Identity &amp; Mockups</h3>
+        <p>Various branding and packaging concepts, including stationery, labels, and display mockups.</p>
+      </div>
+    </article>
+  </div>
+  <div id="portfolioModal" class="portfolio-modal" aria-hidden="true">
+    <div class="portfolio-modal-backdrop"></div>
+    <div class="portfolio-modal-content" role="dialog" aria-modal="true" aria-labelledby="portfolioModalTitle">
+      <button class="modal-close" type="button" aria-label="Close portfolio popup">×</button>
+      <h3 id="portfolioModalTitle">Category</h3>
+      <p class="modal-intro">Explore the collection for this design category.</p>
+      <div class="modal-items"></div>
+    </div>
+  </div>
+</section>
+
 <section id="certs">
-  <p class="section-label">04 / Certifications</p>
+  <p class="section-label">05 / Certifications</p>
   <h2 class="section-title reveal">Credentials</h2>
   <div class="cert-meta reveal">
     <span class="cert-count">Total certificates: <strong id="certCount">10</strong></span>
@@ -159,7 +232,7 @@
 </section>
 
 <section id="education">
-  <p class="section-label">05 / Education</p>
+  <p class="section-label">06 / Education</p>
   <h2 class="section-title reveal">Academic<br>Background</h2>
   <div class="edu-grid reveal">
     <div class="edu-card">
@@ -178,7 +251,7 @@
 </section>
 
 <section id="contact">
-  <p class="section-label">06 / Contact</p>
+  <p class="section-label">07 / Contact</p>
   <div class="contact-inner reveal">
     <div>
       <h2 class="contact-headline">Let's Build<br>Something<br><span>Together.</span></h2>
@@ -276,6 +349,103 @@
 
   const certObserver = new MutationObserver(() => updateCertCount());
   certObserver.observe(certGrid, { childList: true, subtree: true });
+
+  const portfolioModal = document.getElementById('portfolioModal');
+  const modalTitle = document.getElementById('portfolioModalTitle');
+  const modalIntro = document.querySelector('.modal-intro');
+  const modalItems = document.querySelector('.modal-items');
+  const closeModalButton = document.querySelector('.modal-close');
+  // remove duplicate filter buttons (same data-category) if any
+  (function dedupeFilterButtons(){
+    const btns = Array.from(document.querySelectorAll('.filter-btn'));
+    const seen = new Set();
+    btns.forEach(b => {
+      const cat = b.dataset.category;
+      if (seen.has(cat)) b.remove(); else seen.add(cat);
+    });
+  })();
+  const portfolioButtons = document.querySelectorAll('.filter-btn');
+  const portfolioCards = document.querySelectorAll('.portfolio-card');
+
+  const portfolioCollections = {
+    'Jerseys': [
+      { label: 'Jersey', title: 'Dream Team Preview', description: 'Alternate jersey concept with team branding and vibrant accent details.', image: 'images/Jerseys/Dream%20Team%20Preview.jpg' },
+      { label: 'Jersey', title: 'Red Prev', description: 'Jersey preview artwork.', image: 'images/Jerseys/Red%20Prev.jpg' },
+      { label: 'Jersey', title: 'Team DLEGACY Prev (Blue)', description: 'DLEGACY blue variant mockup.', image: 'images/Jerseys/Team%20DLEGACY%20Prev%20%28Blue%29.jpg' },
+      { label: 'Jersey', title: 'Team DLEGACY Prev (White)', description: 'DLEGACY white variant mockup.', image: 'images/Jerseys/Team%20DLEGACY%20Prev%20%28White%29.jpg' },
+      { label: 'Jersey', title: 'Team ULTIMATUM', description: 'ULTIMATUM team jersey artwork.', image: 'images/Jerseys/Team%20ULTIMATUM.jpg' },
+      { label: 'Jersey', title: 'TRH Preview', description: 'Jersey design sample from TRH, shown with the full kit layout.', image: 'images/Jerseys/TRH%20Preview.jpg' },
+      { label: 'Jersey', title: 'Unibersidad ng Pilipinas', description: 'University jersey sample.', image: 'images/Jerseys/Unibersidad%20ng%20Pilipinas.jpg' },
+      { label: 'Jersey', title: 'White Prev', description: 'White jersey preview.', image: 'images/Jerseys/White%20Prev.jpg' }
+    ],
+    'T-Shirts & Polo Shirts': [
+      { label: 'Polo', title: 'AMG Landscaping Preview', description: 'Polo preview for AMG Landscaping.', image: 'images/Polo%20Shirts/AMG%20Landscaping%20Preview.jpg' },
+      { label: 'Polo', title: 'Dayap INHS', description: 'Polo shirt design with school branding and refined line details.', image: 'images/Polo%20Shirts/Dayap%20INHS.jpg' },
+      { label: 'Polo', title: 'Events Floral Polo', description: 'Floral polo shirt mockup for event merchandise with bold print styling.', image: 'images/Polo%20Shirts/Events%20Floral%20Polo.jpg' },
+      { label: 'Polo', title: 'Hepeng Gala Preview', description: 'Polo preview for Hepeng Gala.', image: 'images/Polo%20Shirts/Hepeng%20Gala%20Preview.jpg' },
+      { label: 'Polo', title: 'SVC Prev', description: 'Polo preview for SVC.', image: 'images/Polo%20Shirts/SVC%20Prev.jpg' },
+      { label: 'T-Shirt', title: 'Design 1 (Black)', description: 'T-shirt mockup (black).', image: 'images/Tshirts/Design%201%20%28Black%29.jpg' },
+      { label: 'T-Shirt', title: 'Design 1 (White)', description: 'T-shirt mockup (white).', image: 'images/Tshirts/Design%201%20%28White%29.jpg' },
+      { label: 'T-Shirt', title: 'Final 1', description: 'Final t-shirt design.', image: 'images/Tshirts/Final%201.jpg' },
+      { label: 'T-Shirt', title: 'Livingproof Prev', description: 'T-shirt preview for Livingproof.', image: 'images/Tshirts/Livingproof%20Prev.jpg' },
+      { label: 'T-Shirt', title: 'Tindig Siglakha', description: 'T-shirt design "Tindig Siglakha".', image: 'images/Tshirts/Tindig%20Siglakha.jpg' }
+    ],
+    'Posters': [
+      { label: 'Poster', title: 'All of Us are Tres', description: 'Promotional poster design.', image: 'images/Posters/All%20of%20Us%20are%20Tres.jpg' },
+      { label: 'Poster', title: 'Malinao League 2025', description: 'Event poster for Malinao League 2025.', image: 'images/Posters/Malinao%20League%202025.jpg' },
+      { label: 'Poster', title: 'Matchup 1', description: 'Matchup promotional poster.', image: 'images/Posters/Matchup%201.jpg' },
+      { label: 'Poster', title: 'Player of the game', description: 'Player of the game feature poster.', image: 'images/Posters/Player%20of%20the%20game.jpg' }
+    ],
+    'Others': [
+      { label: 'Other', title: 'Coversure ID', description: 'ID mockup for Coversure.', image: 'images/Others/Coversure%20ID.jpg' },
+      { label: 'Other', title: 'DIC ID Lace', description: 'ID mockup with lace detail.', image: 'images/Others/DIC%20ID%20Lace.jpg' },
+      { label: 'Other', title: 'Lalakay ID Lace', description: 'ID mockup with lace detail.', image: 'images/Others/Lalakay%20ID%20Lace.jpg' },
+      { label: 'Other', title: 'UINHS CSS ID Lace', description: 'ID mockup for UINHS.', image: 'images/Others/UINHS%20CSS%20ID%20Lace.jpg' }
+    ]
+  };
+
+  function openPortfolioModal(category) {
+    const works = portfolioCollections[category] || [];
+    modalTitle.textContent = category;
+    modalIntro.textContent = `Open collection of work for ${category}.`;
+    modalItems.innerHTML = works.map(work => `
+      <div class="modal-item">
+        ${work.image ? `<img class="modal-item-thumb" src="${work.image}" alt="${work.title}">` : ''}
+        <span class="modal-item-label">${work.label}</span>
+        <h4>${work.title}</h4>
+        <p>${work.description}</p>
+      </div>
+    `).join('');
+    portfolioModal.classList.add('open');
+    portfolioModal.setAttribute('aria-hidden', 'false');
+  }
+
+  function closePortfolioModal() {
+    portfolioModal.classList.remove('open');
+    portfolioModal.setAttribute('aria-hidden', 'true');
+  }
+
+  portfolioButtons.forEach(button => {
+    button.addEventListener('click', () => openPortfolioModal(button.dataset.category));
+  });
+
+  portfolioCards.forEach(card => {
+    card.addEventListener('click', () => openPortfolioModal(card.dataset.category));
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openPortfolioModal(card.dataset.category);
+      }
+    });
+  });
+
+  closeModalButton.addEventListener('click', closePortfolioModal);
+  document.querySelector('.portfolio-modal-backdrop').addEventListener('click', closePortfolioModal);
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && portfolioModal.classList.contains('open')) {
+      closePortfolioModal();
+    }
+  });
 </script>
 </body>
 </html>
